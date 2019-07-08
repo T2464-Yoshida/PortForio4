@@ -24,6 +24,10 @@
 </div>
 
 <div>
+  <%= link_to "ＣＳＶ出力", user_path(@user, @user, params:{first_day: @first_day },format: :csv), class: "btn btn-primary" %>
+</div>
+
+<div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
       <tr>
