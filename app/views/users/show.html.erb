@@ -3,8 +3,8 @@
   <table class="table table-bordered table-condensed user-table">
     <tr>
       <td>【<%= l(@first_day, format: :middle) %>】勤怠管理表</td>
-      <td>指定勤務時間：<%= format_basic_info(@user.work_time) %></td>
-      <td>基本時間：<%= format_basic_info(@user.basic_time) %></td>
+      <td>指定勤務時間：<%= format_basic_info(@user.work_time) %>（ｈ）</td>
+      <td>基本時間：<%= format_basic_info(@user.basic_time) %>（ｈ）</td>
       <td>月初日：<%= l(@first_day, format: :short) %></td>
     </tr>
 
@@ -45,7 +45,15 @@
       <% @attendances.each do |day| %>
         <tr>
           <td><%= l(day.worked_on, format: :short) %></td>
-          <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+          <td>
+            <% if day.worked_on.wday == 0 %>
+              <font color="red"><%= $days_of_the_week[day.worked_on.wday] %></font>
+            <% elsif day.worked_on.wday == 6 %>
+              <font color="blue"><%= $days_of_the_week[day.worked_on.wday] %></font>
+            <% else %>
+              <%= $days_of_the_week[day.worked_on.wday] %>
+            <% end %>
+          </td>
           <td>
             <% if btn_text = attendance_state(day) %>
               <%= link_to "#{btn_text}登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
@@ -72,9 +80,9 @@
         <td rowspan="2"></td>
       </tr>
       <tr>
-        <td colspan="2"><%= @attendances.count %></td>
-        <td colspan="2"><%= format_basic_info(@user.work_time).to_f * @worked_sum %></td>
-        <td colspan="2"><%= format("%.2f", @total_working_times.to_f) %></td>
+        <td colspan="2"><%= @attendances.count %>（日）</td>
+        <td colspan="2"><%= format_basic_info(@user.work_time).to_f * @worked_sum %>（ｈ）</td>
+        <td colspan="2"><%= format("%.2f", @total_working_times.to_f) %>（ｈ）</td>
       </tr>
     </tfoot>    
   </table>
